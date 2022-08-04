@@ -50,7 +50,7 @@ function(cpputest_add_test target file)
   if(CPPUTEST_COMPILE_TESTS)
     # Build test
     add_executable(${target} ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${ARGN}
-                             main_cpputest.cpp)
+                             misc/main_cpputest.cpp)
     target_link_libraries(${target} PUBLIC CppUTest)
     # target_compile_options(${target} PUBLIC -Wno-long-long)
 
@@ -81,7 +81,7 @@ cpp_u_test_to_unity.rb" "tests/${file}" >/dev/null
       OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../${unity_main}
       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
       COMMAND
-        tests/unity_gen_main.py ${CMAKE_CURRENT_SOURCE_DIR}/../${unity_runner}
+        tests/misc/unity_gen_main.py ${CMAKE_CURRENT_SOURCE_DIR}/../${unity_runner}
         ${CMAKE_CURRENT_SOURCE_DIR}/../${unity_main}
       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../${unity_runner}
       COMMENT "Creating Unity main ${unity_main}")
