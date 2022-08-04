@@ -72,6 +72,6 @@ $ cmake .. && cmake --build . && ctest --output-on-error
 CppUTest does not build with avr-gcc.
 
 ```console
-$ cmake .. --toolchain toolchains/avr.cmake -DCPPUTEST_COMPILE_TESTS=OFF
+$ cmake .. --toolchain cmake/toolchains/avr.cmake -DCPPUTEST_COMPILE_TESTS=OFF
 $ cmake --build .
 ```

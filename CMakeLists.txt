@@ -9,10 +9,10 @@ set(CMAKE_BUILD_TYPE
     RelWithDebInfo
     CACHE STRING "Build type: Debug, Release, RelWithDebInfo or MinSizeRel")
 
-include(toolchains/misc/optimizations.cmake)
-include(toolchains/misc/warnings.cmake)
-include(toolchains/misc/standard.cmake)
-include(toolchains/misc/exec_postbuild.cmake)
+include(cmake/misc/optimizations.cmake)
+include(cmake/misc/warnings.cmake)
+include(cmake/misc/standard.cmake)
+include(cmake/misc/exec_postbuild.cmake)
 
 # HAL: hardware abstraction layer.
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL avr)
