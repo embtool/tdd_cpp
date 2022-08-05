@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(tdd_unity VERSION 1.0)
+project(tdd_cpp VERSION 1.0)
 
 set(DEV_BUILD
     ON

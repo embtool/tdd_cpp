@@ -25,6 +25,9 @@ FetchContent_Declare(
 set(UNITY_EXTENSION_FIXTURE
     ON
     CACHE BOOL "Enable Unity \"fixture\" extension.")
+set(UNITY_EXTENSION_MEMORY
+    OFF
+    CACHE BOOL "Disable Unity \"memory\" extention.")
 FetchContent_MakeAvailable(unity)
 set_target_properties(unity PROPERTIES EXCLUDE_FROM_ALL TRUE)
 target_compile_definitions(unity PUBLIC -Dinline=__inline)
@@ -81,7 +84,8 @@ cpp_u_test_to_unity.rb" "tests/${file}" >/dev/null
       OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../${unity_main}
       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
       COMMAND
-        tests/misc/unity_gen_main.py ${CMAKE_CURRENT_SOURCE_DIR}/../${unity_runner}
+        tests/misc/unity_gen_main.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/../${unity_runner}
         ${CMAKE_CURRENT_SOURCE_DIR}/../${unity_main}
       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../${unity_runner}
       COMMENT "Creating Unity main ${unity_main}")

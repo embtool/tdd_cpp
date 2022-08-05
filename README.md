@@ -1,23 +1,27 @@
-# TDD CppUTest - C/C++ Project Template
+# TDD C/C++ Project Template - CppUTest and Unity
 
 by [Djones A. Boni](https://github.com/djboni)
 
 C/C++ Project Template for Test Driven Development using
-[CppUTest](https://github.com/cpputest/cpputest) test framework.
+[CppUTest](https://github.com/cpputest/cpputest) and
+[Unity](https://github.com/ThrowTheSwitch/Unity) test frameworks.
 
-The tests are also converted to the
-[Unity](https://github.com/ThrowTheSwitch/Unity) test framework, so it
-is possible to test on platforms that only have a C compiler.
+Unity test runners are generated automatically.
+
+Tests for CppUTest are automatically converted to Unity, so they can
+run on platforms that only have a C compiler.
 
 It is possible to disable the compilation and execution of CppUTest
-tests and Unity tests by setting `CPPUTEST_COMPILE_TESTS` and
-`CPPUTEST_CONVERT_TESTS` variables on CMake (see the table below).
+tests and Unity tests by setting `CPPUTEST_COMPILE_TESTS`,
+`CPPUTEST_CONVERT_TESTS`, and `UNITY_COMPILE_TESTS` variables on CMake
+(see the table below).
 
-| CMake definitions               | Description                        |
-| ------------------------------- | ---------------------------------- |
-| `-D DEV_BUILD=OFF`              | Disable developer build.           |
-| `-D CPPUTEST_COMPILE_TESTS=OFF` | Disable CppUTest tests.            |
-| `-D CPPUTEST_CONVERT_TESTS=OFF` | Disable conversion to Unity tests. |
+| CMake definitions               | Description                           |
+| ------------------------------- | ------------------------------------- |
+| `-D DEV_BUILD=OFF`              | Disable developer build.              |
+| `-D CPPUTEST_COMPILE_TESTS=OFF` | Disable CppUTest tests.               |
+| `-D CPPUTEST_CONVERT_TESTS=OFF` | Disable CppUTest conversion to Unity. |
+| `-D UNITY_COMPILE_TESTS=OFF`    | Disable Unity tests.                  |
 
 ## Table of Contents
 
@@ -69,7 +73,7 @@ $ cmake .. && cmake --build . && ctest --output-on-error
 
 ## AVR toolchain
 
-CppUTest does not build with avr-gcc.
+CppUTest does not build with avr-gcc, so we disable it.
 
 ```console
 $ cmake .. --toolchain cmake/toolchains/avr.cmake -DCPPUTEST_COMPILE_TESTS=OFF
