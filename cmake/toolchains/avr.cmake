@@ -1,6 +1,7 @@
 # ~~~
 # Toolchain file for AVR microcontrollers:
 # - ATMega328P
+# - ATMega2560
 # ~~~
 
 # The Generic system is used with CMake to specify bare metal
@@ -33,8 +34,16 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 # Set the CMAKE C flags (which should also be used by the assembler!)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmcu=atmega328p -D__AVR_ATmega328P__")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmcu=atmega328p -D__AVR_ATmega328P__")
+
+# ~~~
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmcu=atmega328p -D__AVR_ATmega328P__")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmcu=atmega328p -D__AVR_ATmega328P__"
+# )
+# set(CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS}")
+# ~~~
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmcu=atmega2560 -D__AVR_ATmega2560__")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmcu=atmega2560 -D__AVR_ATmega2560__")
 # set(CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS}")
 
 # Cache the flags for use
