@@ -1,33 +1,68 @@
-#include "hal.h"
-#include <avr/io.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 /*
- * STDOUT and STDERR write to serial interface (UART0).
+ * Simulation on QEMU:
+ * https://qemu-project.gitlab.io/qemu/system/target-avr.html
+ *
+ * qemu-system-avr -machine mega2560 -nographic -bios main.bin -S -s
+ * avr-gdb -ex 'target remote :1234' main.elf
  */
 
-static void uart_init(void)
-{
-    float F_CPU = 16000000;
-    float UART_BAUD_RATE = 115200;
-    float UART_BAUD_REGISTERS = (((F_CPU / (16.0 * UART_BAUD_RATE))) - 1.0);
+#include "hal.h"
+#include <avr/io.h>
+#include <stdint.h>
+#include <stdio.h>
 
-    UCSR0B = (1 << TXEN0);
-    UBRR0 = UART_BAUD_REGISTERS;
+#ifndef F_CPU
+    #define F_CPU 160000000UL
+#endif
+
+#ifndef F_UART0
+    #define F_UART0 9600UL
+#endif
+
+int uart0_fputc(char ch, FILE *stream);
+
+FILE uart0_tx = FDEV_SETUP_STREAM(&uart0_fputc, NULL, _FDEV_SETUP_RW);
+
+void uart0_init(uint32_t baud_rate)
+{
+    /* Enable trasmit */
+    UCSR0B |= (1 << RXEN0) | (1 << TXEN0);
+
+    /* 8 bit character */
+    UCSR0C |= (1 << UCSZ00) | (1 << UCSZ01);
+
+    /* Baud rate */
+    UBRR0 = (F_CPU + 8 * baud_rate) / (16 * baud_rate) - 1;
+
+    stdout = &uart0_tx;
 }
 
-int fputc(int ch, FILE *stream)
+void uart0_send(uint8_t ch)
 {
-    (void)stream;
-
-    while ((UCSR0A & (1 << UDRE0)) == 0)
+    while (!(UCSR0A & (1 << UDRE0)))
     {
+        /* Wait TX buffer to be emtpy */
     }
 
     UDR0 = ch;
+}
 
-    return ch;
+int16_t uart0_recv(void)
+{
+    if (!(UCSR0A & (1 << RXC0)))
+    {
+        /* Nothing received */
+        return -1;
+    }
+
+    return UDR0;
+}
+
+int uart0_fputc(char ch, FILE *stream)
+{
+    (void)stream;
+    uart0_send(ch);
+    return 0;
 }
 
 /*
@@ -36,17 +71,5 @@ int fputc(int ch, FILE *stream)
 
 void hal_init(void)
 {
-    uart_init();
+    uart0_init(F_UART0);
 }
-
-/*
- * https://qemu-project.gitlab.io/qemu/system/target-avr.html
- *
- * qemu-system-avr -machine uno -bios build/main.elf -serial
- * tcp::5678,server=on,wait=on -s -S
- *
- * telnet localhost 5678
- *
- * gdb build/main.elf
- * target remote :1234
- */

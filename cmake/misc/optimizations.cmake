@@ -10,14 +10,23 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL avr)
 
   # Optimize: Link time optimization.
   #
+  # Disabled. Removes debug info.
+  #
   # Link: https://archlinux.org/todo/lto-fat-objects/
-  add_compile_options(-flto)
-  add_compile_options(-ffat-lto-objects)
-  add_link_options(-flto)
-  add_link_options(-ffat-lto-objects)
+  #
+  # ~~~
+  # add_compile_options(-flto)
+  # add_compile_options(-ffat-lto-objects)
+  # add_link_options(-flto)
+  # add_link_options(-ffat-lto-objects)
+  # ~~~
 
   # Disable C++ exceptions
   add_compile_options(-fno-exceptions)
 
   # No start files add_link_options(-nostartfiles)
+
+  # Linker script add_link_options(-T=${target}.ld)
+
+  # Map file add_link_options(-Wl,-Map=${target}.map)
 endif()

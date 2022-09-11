@@ -19,6 +19,14 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL avr)
     add_custom_command(
       TARGET ${target}
       POST_BUILD
+      COMMAND ${CMAKE_OBJCOPY} ${target}${CMAKE_EXECUTABLE_SUFFIX_C} -O binary
+              ${target}.bin
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+      COMMENT "Convert ELF to BIN}")
+
+    add_custom_command(
+      TARGET ${target}
+      POST_BUILD
       COMMAND ${CMAKE_SIZE} ${target}${CMAKE_EXECUTABLE_SUFFIX_C}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       COMMENT "Print ELF size")
