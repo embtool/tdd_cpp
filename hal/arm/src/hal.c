@@ -2,7 +2,7 @@
  * Simulation on QEMU:
  * https://www.qemu.org/docs/master/system/target-arm.html
  *
- * qemu-system-arm -machine stm32vldiscovery -nographic -kernel main.bin -S -s
+ * qemu-system-arm -machine stm32vldiscovery -nographic -semihosting -kernel main.bin -S -s
  * gdb-multiarch -ex 'target remote :1234' main.elf
  *
  * New-lib sycalls:
@@ -255,6 +255,7 @@ extern int main(int argc, char **argv);
 
 void Reset_Handler(void);
 void Default_Hadler(void);
+void Semihosting_Exit(void);
 void NMI_Handler(void) ALIAS("Default_Hadler");
 void HardFault_Handler(void) ALIAS("Default_Hadler");
 void MemManage_Handler(void) ALIAS("Default_Hadler");
@@ -309,9 +310,27 @@ NAKED void Reset_Handler(void)
 
     main(0, NULL);
 
+    Semihosting_Exit();
+
     while (1)
     {
     }
+}
+
+void Semihosting_Exit(void)
+{
+    /* r0 = 0x18 - angel_SWIreason_ReportException */
+    __asm volatile("mov r0, #0x18");
+
+    /* r1 = 0x20026 - ADP_Stopped_ApplicationExit */
+    __asm volatile(
+        "mov r1, #0x20000 \n\t"
+        "orr r1, #0x26");
+
+    /* Semihosting call */
+    __asm volatile("bkpt 0xAB");
+    /* __asm volatile("svc 0xAB"); */
+    /* __asm volatile("svc 0x00123456"); */
 }
 
 NAKED void Default_Hadler(void)
