@@ -1,4 +1,4 @@
-if(CMAKE_SYSTEM_PROCESSOR STREQUAL avr)
+if(CMAKE_SYSTEM_NAME STREQUAL Generic)
   # Extend add_executable() to create an HEX file and to print size
   function(add_executable target)
     _add_executable(${target} ${ARGN})

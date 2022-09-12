@@ -1,4 +1,4 @@
-if(CMAKE_SYSTEM_PROCESSOR STREQUAL avr)
+if(CMAKE_SYSTEM_NAME STREQUAL Generic)
   # Optimize: Reduce size and add debug information to ELF
   add_compile_options(-Os)
   add_compile_options(-g3)

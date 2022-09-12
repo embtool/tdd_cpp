@@ -15,7 +15,9 @@ include(cmake/misc/standard.cmake)
 include(cmake/misc/exec_postbuild.cmake)
 
 # HAL: hardware abstraction layer.
-if(CMAKE_SYSTEM_PROCESSOR STREQUAL avr)
+if(CMAKE_SYSTEM_PROCESSOR STREQUAL arm)
+  add_subdirectory(hal/arm)
+elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL avr)
   add_subdirectory(hal/avr)
 else()
   add_subdirectory(hal/os)

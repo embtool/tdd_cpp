@@ -73,9 +73,18 @@ $ cmake .. && cmake --build . && ctest --output-on-error
 
 ## AVR toolchain
 
-CppUTest does not build with avr-gcc, so we disable it.
+CppUTest does not build with avr-g++, so we disable it.
 
 ```console
-$ cmake .. --toolchain cmake/toolchains/avr.cmake -DCPPUTEST_COMPILE_TESTS=OFF
+$ cmake .. --toolchain ../cmake/toolchains/avr.cmake -DCPPUTEST_COMPILE_TESTS=OFF
+$ cmake --build .
+```
+
+## AVR toolchain
+
+CppUTest uses too much dynamic memory (heap RAM), so we disable it.
+
+```console
+$ cmake .. --toolchain ../cmake/toolchains/arm.cmake -DCPPUTEST_COMPILE_TESTS=OFF
 $ cmake --build .
 ```
