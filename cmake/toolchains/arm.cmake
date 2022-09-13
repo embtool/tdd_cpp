@@ -69,3 +69,5 @@ set(LINKER_SCRIPT
     CACHE STRING "LINKER_SCRIPT")
 
 add_link_options("-T${LINKER_SCRIPT}")
+
+add_link_options("-specs=nano.specs")
