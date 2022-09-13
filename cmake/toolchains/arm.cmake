@@ -55,13 +55,17 @@ set(CMAKE_EXECUTABLE_SUFFIX_CXX .elf)
 
 # Processor
 
-add_compile_options("-mcpu=cortex-m3")
-add_link_options("-mcpu=cortex-m3")
+set(MACHINE_CPU
+    "-mcpu=cortex-m3"
+    CACHE STRING "LINKER_SCRIPT")
+
+add_compile_options("${MACHINE_CPU}")
+add_link_options("${MACHINE_CPU}")
 
 # Linker script
 
 set(LINKER_SCRIPT
-    "${CMAKE_CURRENT_SOURCE_DIR}/linker/arm.ld"
+    "${CMAKE_CURRENT_SOURCE_DIR}/linker/cortex-m3.ld"
     CACHE STRING "LINKER_SCRIPT")
 
 add_link_options("-T${LINKER_SCRIPT}")

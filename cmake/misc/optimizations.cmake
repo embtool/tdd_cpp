@@ -21,8 +21,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL Generic)
   # add_link_options(-ffat-lto-objects)
   # ~~~
 
-  # Disable C++ exceptions
-  add_compile_options(-fno-exceptions)
+  # Disable C++ exceptions add_compile_options(-fno-exceptions)
 
   # No start files add_link_options(-nostartfiles)
 

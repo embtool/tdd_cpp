@@ -80,11 +80,26 @@ $ cmake .. --toolchain ../cmake/toolchains/avr.cmake -DCPPUTEST_COMPILE_TESTS=OF
 $ cmake --build .
 ```
 
-## AVR toolchain
+## ARM toolchain (Cortex-M3)
 
 CppUTest uses too much dynamic memory (heap RAM), so we disable it.
 
 ```console
 $ cmake .. --toolchain ../cmake/toolchains/arm.cmake -DCPPUTEST_COMPILE_TESTS=OFF
+$ cmake --build .
+```
+
+It is possible to pass MACHINE_CPU and LINKER_SCRIPT to cmake. These are the defaults:
+
+```console
+$ cmake .. --toolchain ../cmake/toolchains/arm.cmake -DCPPUTEST_COMPILE_TESTS=OFF -DMACHINE_CPU="-mcpu=cortex-m3" -DLINKER_SCRIPT="../linker/cortex-m3.ld"
+```
+
+## ARM toolchain (ARM926EJ-S)
+
+This processor allows much more RAM, so we can keep CppUTest enabled too.
+
+```console
+$ cmake .. --toolchain ../cmake/toolchains/arm.cmake -DMACHINE_CPU="-mcpu=arm926ej-s" -DLINKER_SCRIPT="../linker/arm926ej-s.ld"
 $ cmake --build .
 ```
