@@ -1,6 +1,7 @@
 # ~~~
 # Toolchain file for ARM microcontrollers:
 # - ARM Cortex-M3 - STM32F100RBT6 - stm32vldiscovery
+# - ARM926EJ-S - versatilepb
 # ~~~
 
 # The Generic system is used with CMake to specify bare metal
@@ -68,6 +69,9 @@ set(LINKER_SCRIPT
     "${CMAKE_CURRENT_SOURCE_DIR}/linker/cortex-m3.ld"
     CACHE STRING "LINKER_SCRIPT")
 
-add_link_options("-T${LINKER_SCRIPT}")
+if(LINKER_SCRIPT)
+  add_link_options("-T${LINKER_SCRIPT}")
+endif()
 
+# Newlib-nano
 add_link_options("-specs=nano.specs")

@@ -6,7 +6,7 @@
  * qemu-system-arm -machine stm32vldiscovery -nographic -semihosting -kernel main.bin -S -s
  *
  * cmake .. --toolchain ../cmake/toolchains/arm.cmake -DMACHINE_CPU="-mcpu=arm926ej-s" -DLINKER_SCRIPT="../linker/arm926ej-s.ld"
- * qemu-system-arm -machine versatilepb -m 16M -nographic -semihosting -kernel main.bin -S -s
+ * qemu-system-arm -machine versatilepb -m 128M -nographic -semihosting -kernel main.bin -S -s
  *
  * gdb-multiarch -ex 'target remote :1234' main.elf
  *

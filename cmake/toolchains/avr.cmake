@@ -25,6 +25,7 @@ set(CMAKE_OBJCOPY
 set(CMAKE_SIZE "${TC_PATH}${CROSS_COMPILE}size")
 
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+# set(CMAKE_C_COMPILER_FORCED TRUE) set(CMAKE_CXX_COMPILER_FORCED TRUE)
 
 # Search for programs in the build host directories
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
@@ -34,17 +35,6 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 # Set the CMAKE C flags (which should also be used by the assembler!)
-
-# ~~~
-# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmcu=atmega328p -D__AVR_ATmega328P__")
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmcu=atmega328p -D__AVR_ATmega328P__"
-# )
-# set(CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS}")
-# ~~~
-
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmcu=atmega2560 -D__AVR_ATmega2560__")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmcu=atmega2560 -D__AVR_ATmega2560__")
-# set(CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS}")
 
 # Cache the flags for use
 set(CMAKE_C_FLAGS
@@ -63,3 +53,22 @@ set(CMAKE_LD_FLAGS
 set(CMAKE_EXECUTABLE_SUFFIX .elf)
 set(CMAKE_EXECUTABLE_SUFFIX_C .elf)
 set(CMAKE_EXECUTABLE_SUFFIX_CXX .elf)
+
+# Processor
+
+set(MACHINE_CPU
+    "-mmcu=atmega2560;-D__AVR_ATmega2560__"
+    CACHE STRING "LINKER_SCRIPT")
+
+add_compile_options("${MACHINE_CPU}")
+add_link_options("${MACHINE_CPU}")
+
+# Linker script
+
+set(LINKER_SCRIPT
+    ""
+    CACHE STRING "LINKER_SCRIPT")
+
+if(LINKER_SCRIPT)
+  add_link_options("-T${LINKER_SCRIPT}")
+endif()
