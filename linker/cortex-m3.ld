@@ -20,6 +20,8 @@ ENTRY(Reset_Handler)
  *   Reset_Handler : Entry of reset handler
  *
  * It defines following symbols, which code can use without definition:
+ *   __IsrVectorStart
+ *   __IsrVectorEnd
  *   __exidx_start
  *   __exidx_end
  *   __copy_table_start__
@@ -48,7 +50,9 @@ SECTIONS
 {
     .text :
     {
+        __IsrVectorStart = .;
         KEEP(*(.isr_vector))
+        __IsrVectorEnd = .;
         *(.text*)
 
         KEEP(*(.init))

@@ -7,7 +7,8 @@
  */
 MEMORY
 {
-    FLASH  (RX):  ORIGIN = 0x00010000, LENGTH = 4M
+    ISR_VECTOR (RWX): ORIGIN = 0x00000000, LENGTH = 64K
+    FLASH  (RX):  ORIGIN = 0x00010000, LENGTH = 4M - 64K
     SRAM   (RWX): ORIGIN = ORIGIN(FLASH) + LENGTH(FLASH), LENGTH = 4M
 }
 
@@ -19,6 +20,8 @@ ENTRY(Reset_Handler)
  *   Reset_Handler : Entry of reset handler
  *
  * It defines following symbols, which code can use without definition:
+ *   __IsrVectorStart
+ *   __IsrVectorEnd
  *   __exidx_start
  *   __exidx_end
  *   __copy_table_start__
@@ -47,7 +50,9 @@ SECTIONS
 {
     .text :
     {
+        __IsrVectorStart = .;
         KEEP(*(.isr_vector))
+        __IsrVectorEnd = .;
         *(.text*)
 
         KEEP(*(.init))

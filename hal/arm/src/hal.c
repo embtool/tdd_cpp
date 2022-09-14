@@ -33,7 +33,8 @@
 #define NAKED __attribute__((naked))
 
 /* Defined by the linker. */
-
+extern uint32_t __IsrVectorStart;
+extern uint32_t __IsrVectorEnd;
 extern uint32_t __etext;
 extern uint32_t __data_start__;
 extern uint32_t __data_end__;
@@ -333,13 +334,13 @@ const uint32_t vectors[] SECTION(".isr_vector") = {
     (uint32_t)&MemManage_Handler,
     (uint32_t)&BusFault_Handler,
     (uint32_t)&UsageFault_Handler,
-    0,
-    0,
-    0,
-    0,
+    0, /* reserved */
+    0, /* reserved */
+    0, /* reserved */
+    0, /* reserved */
     (uint32_t)&SVC_Handler,
     (uint32_t)&DebugMonitor_Handler,
-    0,
+    0, /* reserved */
     (uint32_t)&PendSV_Handler,
     (uint32_t)&SysTick_Handler,
 };
@@ -356,15 +357,18 @@ void FIQ_Handler(void) ALIAS("Default_Handler");
 
 NAKED SECTION(".isr_vector") void vectors(void)
 {
+    /* Use absolute addresses so the interrupt vector can be copied
+     * to address 0 in the reset handler.
+     */
     __asm volatile(
-        "B Reset_Handler         \n\t"
-        "B Undefined_Handler     \n\t"
-        "B SWI_Handler           \n\t"
-        "B PrefetchAbort_Handler \n\t"
-        "B DataAbort_Handler     \n\t"
-        "B .                     \n\t" /* reserved */
-        "B IRQ_Handler           \n\t"
-        "B FIQ_Handler           \n\t");
+        "ldr pc, =Reset_Handler         \n\t"
+        "ldr pc, =Undefined_Handler     \n\t"
+        "ldr pc, =SWI_Handler           \n\t"
+        "ldr pc, =PrefetchAbort_Handler \n\t"
+        "ldr pc, =DataAbort_Handler     \n\t"
+        "b .                            \n\t" /* reserved */
+        "ldr pc, =IRQ_Handler           \n\t"
+        "ldr pc, =FIQ_Handler           \n\t");
 }
 
 #endif /* __ARM_ARCH */
@@ -388,7 +392,20 @@ NAKED void Reset_Handler(void)
      * which jumps to the reset handler. The stack pointer must be
      * explicitly set in the reset handler.
      */
-    __asm volatile("LDR sp, =__StackTop" ::: "memory");
+    __asm volatile("ldr sp, =__StackTop" ::: "memory");
+
+    /* Copy interrupt vector.
+     * Qemu copies the binary to address 0x10000 then jumps to that
+     * address. That is the interrupt vector, which jumps to the reset
+     * handler.
+     * To enable the interrupt vector it is necessary to copy it to the
+     * address 0x0.
+     */
+    src = &__IsrVectorStart;
+    dest = (uint32_t *)0;
+    size = &__IsrVectorEnd - &__IsrVectorStart;
+    for (i = 0; i < size; ++i)
+        *dest++ = *src++;
 #endif
 
     /* Copy data section */
