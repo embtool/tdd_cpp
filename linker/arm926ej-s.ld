@@ -52,6 +52,7 @@ SECTIONS
     {
         __IsrVectorStart = .;
         KEEP(*(.isr_vector))
+        . = ALIGN(4);
         __IsrVectorEnd = .;
         *(.text*)
 

@@ -12,6 +12,14 @@ if(CMAKE_SYSTEM_NAME STREQUAL Generic)
     # Create MAP file
     target_link_options(${target} PRIVATE "-Wl,-Map=${target}.map")
 
+    # Print size
+    add_custom_command(
+      TARGET ${target}
+      POST_BUILD
+      COMMAND ${CMAKE_SIZE} ${target}${CMAKE_EXECUTABLE_SUFFIX_C}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+      COMMENT "Print ELF size")
+
     # Create BIN file
     add_custom_command(
       TARGET ${target}
@@ -21,12 +29,22 @@ if(CMAKE_SYSTEM_NAME STREQUAL Generic)
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       COMMENT "Convert ELF to BIN}")
 
-    # Print size
-    add_custom_command(
-      TARGET ${target}
-      POST_BUILD
-      COMMAND ${CMAKE_SIZE} ${target}${CMAKE_EXECUTABLE_SUFFIX_C}
+    # Create HEX file (not created by default)
+    add_custom_target(
+      ${target}.hex
+      COMMAND ${CMAKE_OBJCOPY} ${target}${CMAKE_EXECUTABLE_SUFFIX_C} -O ihex
+              ${target}.hex
+      DEPENDS ${target}${CMAKE_EXECUTABLE_SUFFIX_C}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-      COMMENT "Print ELF size")
+      COMMENT "Convert ELF to HEX")
+
+    # Create S file (disassembly file, not created by default)
+    add_custom_target(
+      ${target}.s
+      COMMAND ${CMAKE_OBJDUMP} --disassemble
+              ${target}${CMAKE_EXECUTABLE_SUFFIX_C} >${target}.s
+      DEPENDS ${target}${CMAKE_EXECUTABLE_SUFFIX_C}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+      COMMENT "Disassemble ELF to S")
   endfunction()
 endif()
