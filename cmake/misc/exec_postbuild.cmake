@@ -41,8 +41,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL Generic)
     # Create S file (disassembly file, not created by default)
     add_custom_target(
       ${target}.s
-      COMMAND ${CMAKE_OBJDUMP} --disassemble
-              ${target}${CMAKE_EXECUTABLE_SUFFIX_C} >${target}.s
+      COMMAND ${CMAKE_OBJDUMP} --disassemble --file-headers --section-headers
+              --source ${target}${CMAKE_EXECUTABLE_SUFFIX_C} >${target}.s
       DEPENDS ${target}${CMAKE_EXECUTABLE_SUFFIX_C}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       COMMENT "Disassemble ELF to S")
