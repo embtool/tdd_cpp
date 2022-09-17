@@ -31,6 +31,7 @@ set(UNITY_EXTENSION_MEMORY
 FetchContent_MakeAvailable(unity)
 set_target_properties(unity PROPERTIES EXCLUDE_FROM_ALL TRUE)
 target_compile_definitions(unity PUBLIC -Dinline=__inline)
+target_compile_options(unity PUBLIC -Wno-long-long)
 
 set(CPPUTEST_COMPILE_TESTS
     ON
