@@ -169,6 +169,7 @@ int _lseek(int file, int ptr, int dir);
 int _kill(int pid, int sig);
 int _getpid(void);
 int _gettimeofday(struct timeval *tp, struct timezone *tz);
+void Semihosting_Exit(void);
 
 int _write(int file, char *ptr, int len)
 {
@@ -242,6 +243,9 @@ void *_sbrk(int incr)
 void _exit(int status)
 {
     (void)status;
+
+    Semihosting_Exit();
+
     while (1)
     {
     }
